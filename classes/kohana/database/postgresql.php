@@ -168,7 +168,6 @@ class Kohana_Database_PostgreSQL extends Database
 			{
 				$sql .= ' RETURNING '.$this->quote_identifier($this->_config['primary_key']);
 			}
-
 			try
 			{
 				$result = pg_query($this->_connection, $sql);
@@ -381,6 +380,6 @@ class Kohana_Database_PostgreSQL extends Database
 
 		$value = pg_escape_string($this->_connection, $value);
 
-		return "'$value'";
+		return '"'.$value.'"';
 	}
 }
