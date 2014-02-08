@@ -380,6 +380,15 @@ class Kohana_Database_PostgreSQL extends Database
 
 		$value = pg_escape_string($this->_connection, $value);
 
+		return "'".$value."'";
+	}
+
+	public function quote($value)
+	{
+		$this->_connection or $this->connect();
+
+		$value = pg_escape_string($this->_connection, $value);
+
 		return '"'.$value.'"';
 	}
 }
