@@ -93,7 +93,6 @@ class Kohana_Database_PostgreSQL extends Database
 		{
 			$this->set_charset($this->_config['charset']);
 		}
-
 		if (empty($this->_config['schema']))
 		{
 			// Assume the default schema without changing the search path
@@ -114,12 +113,23 @@ class Kohana_Database_PostgreSQL extends Database
 
 	public function disconnect()
 	{
-		if ( ! $status = ! is_resource($this->_connection))
+		$status = ! is_resource($this->_connection);
+		try
 		{
-			if ($status = pg_close($this->_connection))
+			// Database is assumed disconnected
+			if ( !$status )
 			{
-				$this->_connection = NULL;
+				if ($status = pg_close($this->_connection))
+				{
+					$this->_connection = NULL;
+					parent::disconnect();
+				}
 			}
+		}
+		catch (Exception $e)
+		{
+			// Database is probably not disconnected
+			// $status = ! is_resource($this->_connection);
 		}
 
 		return $status;
